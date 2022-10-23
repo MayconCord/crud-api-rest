@@ -65,25 +65,23 @@ class Aluno{
         }
     }
 
-    public function atualizar(){
+    public function atualizar($id){
         $sql = " UPDATE aluno SET nome = ?, idade = ?, turma = ? WHERE id = ? ";
 
         $stmt = Model::getConn()->prepare($sql);
         $stmt->bindValue(1, $this->nome); 
         $stmt->bindValue(2, $this->idade);
         $stmt->bindValue(3, $this->turma);
-        $stmt->bindValue(4, $this->id);
+        $stmt->bindValue(4, $id);
 
         return $stmt->execute();
     }
 
-    public function delete($id)
-    {
-        $consultaDelete = 'DELETE FROM aluno WHERE id = :id';
-        if ($id) {
-            $stmt = Model::getConn()->prepare($consultaDelete);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
-        }
+    public function deletar($id){
+        $sql = 'DELETE FROM aluno WHERE id = ?';
+        $stmt = Model::getConn()->prepare($sql);
+        $stmt->bindParam(1, $id);
+
+        return $stmt->execute();
     }
 }

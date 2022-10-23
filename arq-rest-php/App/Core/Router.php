@@ -37,7 +37,6 @@ class Router{
             exit;
         }
 
-        //require_once "../App/Controllers/" . ucfirst($this->controller) . ".php";
         require_once "C:\\xampp\htdocs\arq-rest-php\App\Controllers\\".ucfirst($this->controller).".php";
 
         $this->controller = new $this->controller;

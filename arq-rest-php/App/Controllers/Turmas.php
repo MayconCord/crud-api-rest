@@ -1,13 +1,13 @@
 <?php
 
-use App\Core\Controller;
+namespace App\Core\Controller;
 
 class Turmas extends Controller{
 
     public function index(){
         $turmaModel = $this->model("Turma");
 
-        $turma = $turmaModel->getUltimoInserido();
+        $turma = $turmaModel->listarTodos();
 
         if (!$turma) {
             http_response_code(204);
@@ -21,13 +21,14 @@ class Turmas extends Controller{
         $novaTurma = $this->getRequestBody();
 
         $turmaModel = $this->model("Turma");
+
         $turmaModel->nome = $novaTurma->nome;
         $turmaModel->numAlunos = $novaTurma->num_alunos;
 
         $turmaModel = $turmaModel->inserir();
 
         if ($turmaModel) {
-            http_response_code(201); //created
+            http_response_code(201);
             echo json_encode($turmaModel);
         } else {
             http_response_code(500);
@@ -36,21 +37,39 @@ class Turmas extends Controller{
     }
 
     public function update($id){
+        
+        $turmaAtualizada = $this->getRequestBody();
+
+        $turma = $turmaModel->buscarPorId($id);
+
+        $turma->nome = $turmaAtualizada->nome;
+        $turma->numAlunos = $turmaAtualizada->num_alunos;
+
+        if (!$turma) {
+            http_response_code(404);
+            echo json_encode(["erro" => "cliente não encontrado"]);
+            exit;
+        }
+        
+        $turma->atualizar($id);
+        //http_response_code(201);
+        echo json_encode($turma, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function delete($id){
         $turmaModel = $this->model("Model");
 
-        $turmaModel = $turmaModel->buscarPorId($id);
+        $turma = $turmaModel->buscarPorId($id);
 
-        if (!$turmaModel) {
+        if (!$turma) {
             http_response_code(404);
             echo json_encode(["erro" => "cliente não encontrado"]);
             exit;
         }
 
-        //$clienteModel = $this->calcularValor($clienteModel);
-        
-        $turmaModel->atualizar();
-        http_response_code(201);
-        echo json_encode($turmaModel, JSON_UNESCAPED_UNICODE);
+        $turmaModel->deletar($id);
+        //http_response_code(201);
+        echo json_encode($turma, JSON_UNESCAPED_UNICODE);
     }
 
 }

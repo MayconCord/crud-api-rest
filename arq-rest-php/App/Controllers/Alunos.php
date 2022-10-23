@@ -1,6 +1,6 @@
 <?php
 
-use App\Core\Controller;
+namespace App\Core\Controller;
 
 class Alunos extends Controller{
 
@@ -35,38 +35,39 @@ class Alunos extends Controller{
     }
 
     public function update($id){
-        $alunoModel = $this->model("Aluno");
 
-        $alunoModel = $alunoModel->buscarPorId($id);
+        $alunoAtualizado = $this->getRequestBody();
+        
+        $aluno = $alunoModel->buscarPorId($id);
 
-        if (!$alunoModel) {
+        $aluno->nome = $alunoAtualizado->nome;
+        $aluno->idade = $alunoAtualizado->idade;
+        $aluno->turma = $alunoAtualizado->turma;
+
+        if (!$aluno) {
             http_response_code(404);
             echo json_encode(["erro" => "cliente não encontrado"]);
             exit;
         }
-
-        //$clienteModel = $this->calcularValor($clienteModel);
         
-        $alunoModel->atualizar();
+        $aluno->atualizar($id);
         http_response_code(201);
-        echo json_encode($alunoModel, JSON_UNESCAPED_UNICODE);
+        echo json_encode($aluno, JSON_UNESCAPED_UNICODE);
     }
 
     public function delete($id){
         $alunoModel = $this->model("Aluno");
 
-        $alunoModel = $alunoModel->buscarPorId($id);
+        $aluno = $alunoModel->buscarPorId($id);
 
-        if (!$alunoModel) {
+        if (!$aluno) {
             http_response_code(404);
             echo json_encode(["erro" => "cliente não encontrado"]);
             exit;
         }
 
-        //$aluno = $this->calcularValor($clienteModel);
-        
-        $alunoModel->deletar();
-        http_response_code(201);
+        $alunoModel->deletar($id);
+        //http_response_code(201);
         echo json_encode($alunoModel, JSON_UNESCAPED_UNICODE);
     }
 

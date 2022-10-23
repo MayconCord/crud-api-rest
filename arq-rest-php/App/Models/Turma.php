@@ -7,6 +7,21 @@ class Turma{
     public $id;
     public $nome;
     public $numAlunos;
+
+    public function listarTodos() {
+        $sql = " SELECT * FROM turma ORDER BY id DESC ";
+
+        $stmt = Model::getConn()->prepare($sql);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            $resultado = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            return $resultado;
+        } else {
+            return [];
+        }
+    }
     
     public function getUltimoInserido(){
 
@@ -64,13 +79,21 @@ class Turma{
 
     }
 
-    public function atualizar(){
+    public function atualizar($id){
         $sql = " UPDATE turma SET nome = ?, num_alunos = ? WHERE id = ? ";
 
         $stmt = Model::getConn()->prepare($sql);
         $stmt->bindValue(1, $this->nome); 
         $stmt->bindValue(2, $this->numAlunos);
-        $stmt->bindValue(3, $this->id);
+        $stmt->bindValue(3, $id);
+
+        return $stmt->execute();
+    }
+
+    public function deletar() {
+        $sql = 'DELETE FROM turma WHERE id = ?';
+        $stmt = Model::getConn()->prepare($sql);
+        $stmt->bindParam(1, $id);
 
         return $stmt->execute();
     }
