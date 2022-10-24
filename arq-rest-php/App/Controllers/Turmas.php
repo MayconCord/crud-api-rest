@@ -36,9 +36,11 @@ class Turmas extends Controller{
         }
     }
 
-    public function update($id){
+    public function update(){
         
         $turmaAtualizada = $this->getRequestBody();
+        $id = $turmaAtualizada->id;
+        $turmaModel = $this->model("Turma");
 
         $turma = $turmaModel->buscarPorId($id);
 
@@ -56,8 +58,11 @@ class Turmas extends Controller{
         echo json_encode($turma, JSON_UNESCAPED_UNICODE);
     }
 
-    public function delete($id){
-        $turmaModel = $this->model("Model");
+    public function delete(){
+
+        $turmaDeletada= $this->getRequestBody();
+        $id = $turmaDeletada->id;
+        $turmaModel = $this->model("Turma");
 
         $turma = $turmaModel->buscarPorId($id);
 

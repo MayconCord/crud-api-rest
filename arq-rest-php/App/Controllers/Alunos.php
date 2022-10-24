@@ -34,10 +34,12 @@ class Alunos extends Controller{
 
     }
 
-    public function update($id){
+    public function update(){
 
         $alunoAtualizado = $this->getRequestBody();
-        
+        $id = $alunoAtualizado->id;
+
+        $alunoModel = $this->model("Aluno");
         $aluno = $alunoModel->buscarPorId($id);
 
         $aluno->nome = $alunoAtualizado->nome;
@@ -55,7 +57,11 @@ class Alunos extends Controller{
         echo json_encode($aluno, JSON_UNESCAPED_UNICODE);
     }
 
-    public function delete($id){
+    public function delete(){
+
+        $alunoDeletado = $this->getRequestBody();
+        $id = $alunoDeletado->id;
+
         $alunoModel = $this->model("Aluno");
 
         $aluno = $alunoModel->buscarPorId($id);

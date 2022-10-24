@@ -90,7 +90,7 @@ class Turma{
         return $stmt->execute();
     }
 
-    public function deletar() {
+    public function deletar($id) {
         $sql = 'DELETE FROM turma WHERE id = ?';
         $stmt = Model::getConn()->prepare($sql);
         $stmt->bindParam(1, $id);
